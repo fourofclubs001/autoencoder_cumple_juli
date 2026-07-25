@@ -1,0 +1,14 @@
+{
+  "id": "lucasvitali/2048-dqn-baseline",
+  "title": "2048 Dqn Baseline",
+  "code_file": "tmp9ejlbr1d.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": [],
+  "competition_sources": [],
+  "kernel_sources": []
+}
