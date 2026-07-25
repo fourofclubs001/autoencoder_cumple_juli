@@ -13,6 +13,7 @@ dependencies = [
     "torch",
     "pandas",
     "matplotlib",
+    "tqdm",
 ]
 
 [tool.setuptools]

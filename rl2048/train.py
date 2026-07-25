@@ -7,6 +7,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import torch
+from tqdm import tqdm
 
 from .dqn_agent import DQNAgent
 from .env import TwentyFortyEightWrapper
@@ -53,7 +54,14 @@ def train(
     scores = deque(maxlen=100)
     max_tiles = deque(maxlen=100)
 
-    for episode in range(start_episode, episodes + 1):
+    pbar = tqdm(
+        range(start_episode, episodes + 1),
+        initial=start_episode - 1,
+        total=episodes,
+        desc="training",
+        unit="ep",
+    )
+    for episode in pbar:
         state, _ = env.reset()
         legal_mask = env.legal_action_mask()
         epsilon = epsilon_by_episode(episode, episodes, eps_start, eps_end)
@@ -83,8 +91,14 @@ def train(
             "epsilon": epsilon,
         })
 
+        pbar.set_postfix(
+            eps=f"{epsilon:.3f}",
+            avg_score=f"{np.mean(scores):.1f}",
+            avg_max_tile=f"{np.mean(max_tiles):.1f}",
+        )
+
         if episode % log_every == 0:
-            print(
+            pbar.write(
                 f"episode {episode:5d} | eps {epsilon:.3f} | "
                 f"avg_score(100) {np.mean(scores):8.1f} | "
                 f"avg_max_tile(100) {np.mean(max_tiles):7.1f}"
@@ -99,6 +113,7 @@ def train(
             }, checkpoint_path)
             pd.DataFrame(history).to_csv(history_path, index=False)
 
+    pbar.close()
     _plot_history(history, plot_path)
     print(f"Saved checkpoint to {checkpoint_path}")
     print(f"Saved history to {history_path}")
