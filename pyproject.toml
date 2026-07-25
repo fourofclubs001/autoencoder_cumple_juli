@@ -11,6 +11,8 @@ dependencies = [
     "gymnasium-2048",
     "numpy",
     "torch",
+    "pandas",
+    "matplotlib",
 ]
 
 [tool.setuptools]
